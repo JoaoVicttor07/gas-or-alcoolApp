@@ -1,131 +1,72 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import React, { use, useState } from "react";
+import { View, Text, StyleSheet, Image } from "react-native";
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import Input from "./components/input";
+import Button from "./components/button";
+import Modal from "./components/modal"
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+export default function App() {
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+  const [modalVisible, setModalVisible] = useState(false);
+  const [alcool, setAlcool] = useState('')
+  const [gasolina, setGasolina] = useState('')
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+  function handleCalcular() {
+    setModalVisible(true)
+  }
 
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+  function handleFecharModal() {
+    setModalVisible(false)
+  }
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  /*
-   * To keep the template simple and small we're adding padding to prevent view
-   * from rendering under the System UI.
-   * For bigger apps the recommendation is to use `react-native-safe-area-context`:
-   * https://github.com/AppAndFlow/react-native-safe-area-context
-   *
-   * You can read more about it here:
-   * https://github.com/react-native-community/discussions-and-proposals/discussions/827
-   */
-  const safePadding = '5%';
 
   return (
-    <View style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        style={backgroundStyle}>
-        <View style={{paddingRight: safePadding}}>
-          <Header/>
-        </View>
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-            paddingHorizontal: safePadding,
-            paddingBottom: safePadding,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
+    <View style={styles.container}>
+      <View style={styles.logoArea}>
+        <Image source={require("./src/images/logo.png")} />
+        <Text style={styles.textOption}>Qual a melhor opção?</Text>
+      </View>
+
+      <View style={styles.inputArea}>
+        <Text style={styles.textDescribe}>Álcool (preço por litro):</Text>
+
+        <Input value={alcool} onChangeText={setAlcool} />
+
+        <Text style={styles.textDescribe}>Gasolina (preço por litro):</Text>
+
+        <Input value={gasolina} onChangeText={setGasolina} />
+
+        <Button onPress={handleCalcular} />
+
+        <Modal visible={modalVisible} onClose={handleFecharModal} />
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    flex: 1,
+    backgroundColor: "#202020",
+    padding: 15,
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  logoArea: {
+    alignItems: "center",
+    marginTop: 50,
+    gap: 20,
   },
-  sectionDescription: {
-    marginTop: 8,
+  textOption: {
+    color: "#fff",
+    fontSize: 25,
+    fontWeight: "bold",
+  },
+  inputArea: {
+    marginTop: 60,
+    gap: 7,
+  },
+  textDescribe: {
+    color: "#fff",
     fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
+    fontWeight: "bold",
   },
 });
-
-export default App;
