@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Image, Alert } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Alert,
+  KeyboardAvoidingView,
+  ScrollView,
+} from "react-native";
 
 import Input from "./components/input";
 import Button from "./components/button";
@@ -24,49 +32,58 @@ export default function App() {
 
     const resultado = valorAlcool / valorGasolina;
 
-    setValorAlcool(valorAlcoolNum)
-    setValorGasolina(valorGasolinaNum)
+    setValorAlcool(valorAlcoolNum);
+    setValorGasolina(valorGasolinaNum);
 
     if (resultado < 0.7) {
-      setMelhorEscolha('Álcool')
+      setMelhorEscolha("Álcool");
     } else {
-      setMelhorEscolha('Gasolina')
+      setMelhorEscolha("Gasolina");
     }
-    setModalVisible(true)
+    setModalVisible(true);
   }
 
   function handleFecharModal() {
-    setAlcool("")
-    setGasolina("")
+    setAlcool("");
+    setGasolina("");
     setModalVisible(false);
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.logoArea}>
-        <Image source={require("./src/images/logo.png")} />
-        <Text style={styles.textOption}>Qual a melhor opção?</Text>
-      </View>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior="height"
+    >
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={styles.container}>
+          <View style={styles.logoArea}>
+            <Image source={require("./src/images/logo.png")} />
+            <Text style={styles.textOption}>Qual a melhor opção?</Text>
+          </View>
 
-      <View style={styles.inputArea}>
-        <Text style={styles.textDescribe}>Álcool (preço por litro):</Text>
+          <View style={styles.inputArea}>
+            <Text style={styles.textDescribe}>Álcool (preço por litro):</Text>
+            <Input value={alcool} onChangeText={setAlcool} />
 
-        <Input value={alcool} onChangeText={setAlcool} />
+            <Text style={styles.textDescribe}>Gasolina (preço por litro):</Text>
+            <Input value={gasolina} onChangeText={setGasolina} />
 
-        <Text style={styles.textDescribe}>Gasolina (preço por litro):</Text>
+            <Button onPress={handleCalcular} />
 
-        <Input value={gasolina} onChangeText={setGasolina} />
-
-        <Button onPress={handleCalcular} />
-
-        <Modal 
-        visible={modalVisible} 
-        onClose={handleFecharModal}
-        melhorEscolha={melhorEscolha}
-        valorAlcool={valorAlcool}
-        valorGasolina={valorGasolina} />
-      </View>
-    </View>
+            <Modal
+              visible={modalVisible}
+              onClose={handleFecharModal}
+              melhorEscolha={melhorEscolha}
+              valorAlcool={valorAlcool}
+              valorGasolina={valorGasolina}
+            />
+          </View>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
