@@ -1,24 +1,45 @@
-import React, { use, useState } from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import React, { useState } from "react";
+import { View, Text, StyleSheet, Image, Alert } from "react-native";
 
 import Input from "./components/input";
 import Button from "./components/button";
-import Modal from "./components/modal"
+import Modal from "./components/modal";
 
 export default function App() {
-
   const [modalVisible, setModalVisible] = useState(false);
-  const [alcool, setAlcool] = useState('')
-  const [gasolina, setGasolina] = useState('')
+  const [alcool, setAlcool] = useState("");
+  const [gasolina, setGasolina] = useState("");
+  const [melhorEscolha, setMelhorEscolha] = useState("");
+  const [valorAlcool, setValorAlcool] = useState(0);
+  const [valorGasolina, setValorGasolina] = useState(0);
 
   function handleCalcular() {
+    const valorAlcoolNum = parseFloat(alcool.replace(",", "."));
+    const valorGasolinaNum = parseFloat(gasolina.replace(",", "."));
+
+    if (isNaN(valorAlcool) || isNaN(valorGasolina)) {
+      Alert.alert("Digite valores válidos para ambos os campos!");
+      return;
+    }
+
+    const resultado = valorAlcool / valorGasolina;
+
+    setValorAlcool(valorAlcoolNum)
+    setValorGasolina(valorGasolinaNum)
+
+    if (resultado < 0.7) {
+      setMelhorEscolha('Álcool')
+    } else {
+      setMelhorEscolha('Gasolina')
+    }
     setModalVisible(true)
   }
 
   function handleFecharModal() {
-    setModalVisible(false)
+    setAlcool("")
+    setGasolina("")
+    setModalVisible(false);
   }
-
 
   return (
     <View style={styles.container}>
@@ -38,7 +59,12 @@ export default function App() {
 
         <Button onPress={handleCalcular} />
 
-        <Modal visible={modalVisible} onClose={handleFecharModal} />
+        <Modal 
+        visible={modalVisible} 
+        onClose={handleFecharModal}
+        melhorEscolha={melhorEscolha}
+        valorAlcool={valorAlcool}
+        valorGasolina={valorGasolina} />
       </View>
     </View>
   );
